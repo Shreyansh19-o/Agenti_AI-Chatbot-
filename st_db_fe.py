@@ -1,5 +1,5 @@
 import streamlit as st
-from lg_backend import chatbot
+from lg_db_be import chatbot,retrive_all_threads
 from langchain_core.messages import HumanMessage
 import uuid
 import datetime
@@ -13,8 +13,8 @@ def generate_thread_id():
     if 'chat_count' not in st.session_state:
         st.session_state['chat_count'] = 0
     st.session_state['chat_count'] += 1
-    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    thread_id = f"Chat No.{st.session_state['chat_count']} - {timestamp}"
+    
+    thread_id = f"Chat No.{st.session_state['chat_count']} - {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     return thread_id
 
 def reset_chat():
@@ -47,7 +47,9 @@ if 'thread_id' not in st.session_state:
     st.session_state['thread_id'] = generate_thread_id()
 
 if 'chat_threads' not in st.session_state:
-    st.session_state['chat_threads'] = []
+    st.session_state['chat_threads'] = retrive_all_threads()
+
+
     add_thread(st.session_state['thread_id'])
 
 
